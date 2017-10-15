@@ -1,22 +1,22 @@
-using UnityEngine;
-using System.Collections;
 using System;
+using System.Collections;
 using Colyseus;
-
 using GameDevWare.Serialization;
 using GameDevWare.Serialization.MessagePack;
+using UnityEngine;
 
-public class ColyseusClient : MonoBehaviour {
+public class ColyseusClient : MonoBehaviour
+{
 
 	Client client;
 	Room room;
 	public string serverName = "localhost";
 	public string port = "3553";
 	public string roomName = "chat";
-
+	
 	// Use this for initialization
-	IEnumerator Start () {
-
+	IEnumerator Start()
+	{
 		String uri = "ws://" + serverName + ":" + port;
 		client = new Client(uri);
 		client.OnOpen += OnOpenHandler;
@@ -24,14 +24,14 @@ public class ColyseusClient : MonoBehaviour {
 		yield return StartCoroutine(client.Connect());
 
 		room = client.Join(roomName);
-		room.OnReadyToConnect += (sender, e) => StartCoroutine ( room.Connect() );
+		room.OnReadyToConnect += (sender, e) => StartCoroutine(room.Connect());
 		room.OnJoin += OnRoomJoined;
 		room.OnUpdate += OnUpdateHandler;
 
-		room.Listen ("players/:id/:axis", this.OnPlayerMove);
-		room.Listen ("players/:id", this.OnPlayerChange);
-		room.Listen ("messages/:number", this.OnMessageAdded);
-		room.Listen (this.OnChangeFallback);
+		room.Listen("players/:id/:axis", OnPlayerMove);
+		room.Listen("players/:id", this.OnPlayerChange);
+		room.Listen("messages/:number", this.OnMessageAdded);
+		room.Listen(this.OnChangeFallback);
 
 		int i = 0;
 
@@ -42,69 +42,72 @@ public class ColyseusClient : MonoBehaviour {
 			// string reply = client.RecvString();
 			if (client.error != null)
 			{
-				Debug.LogError ("Error: "+client.error);
+				Debug.LogError("Error: " + client.error);
 				break;
 			}
 
 			i++;
 
-			if (i % 50 == 0) {
+			if (i % 50 == 0)
+			{
 				room.Send("some_command");
 			}
 
-			yield return 0;
+			yield return null;
 		}
 
 		OnApplicationQuit();
 	}
 
-	void OnDestroy ()
+	void OnDestroy()
 	{
 		// Make sure client will disconnect from the server
-		room.Leave ();
-		client.Close ();
+		if (room != null)
+			room.Leave();
+		if (client != null)
+			client.Close();
 	}
 
-	void OnOpenHandler (object sender, EventArgs e)
+	void OnOpenHandler(object sender, EventArgs e)
 	{
 		Debug.Log("Connected to server. Client id: " + client.id);
 	}
 
-	void OnRoomJoined (object sender, EventArgs e)
+	void OnRoomJoined(object sender, EventArgs e)
 	{
 		Debug.Log("Joined room successfully.");
 	}
 
-	void OnPlayerChange (DataChange change)
+	void OnPlayerChange(DataChange change)
 	{
-		Debug.Log ("OnPlayerChange");
-		Debug.Log (change.operation);
-		Debug.Log (change.path["id"]);
-		Debug.Log (change.value);
+		Debug.Log("OnPlayerChange");
+		Debug.Log(change.operation);
+		Debug.Log(change.path["id"]);
+		Debug.Log(change.value);
 	}
 
-	void OnPlayerMove (DataChange change)
+	void OnPlayerMove(DataChange change)
 	{
-		Debug.Log ("OnPlayerMove");
-		Debug.Log ("playerId: " + change.path["id"] + ", Axis: " + change.path["axis"]);
-		Debug.Log (change.value);
+		Debug.Log("OnPlayerMove");
+		//Debug.Log("playerId: " + change.path["id"] + ", Axis: " + change.path["axis"]);
+		//Debug.Log(change.value);
 	}
 
-	void OnPlayerRemoved (DataChange change)
+	void OnPlayerRemoved(DataChange change)
 	{
-		Debug.Log ("OnPlayerRemoved");
-		Debug.Log (change.path);
-		Debug.Log (change.value);
+		Debug.Log("OnPlayerRemoved");
+		Debug.Log(change.path);
+		Debug.Log(change.value);
 	}
 
-	void OnMessageAdded (DataChange change)
+	void OnMessageAdded(DataChange change)
 	{
-		Debug.Log ("OnMessageAdded");
-		Debug.Log (change.path["number"]);
-		Debug.Log (change.value);
+		Debug.Log("OnMessageAdded");
+		Debug.Log(change.path["number"]);
+		Debug.Log(change.value);
 	}
 
-	void OnChangeFallback (PatchObject change)
+	void OnChangeFallback(PatchObject change)
 	{
 		// Debug.Log ("OnChangeFallback");
 		// Debug.Log (change.operation);
@@ -112,7 +115,7 @@ public class ColyseusClient : MonoBehaviour {
 		// Debug.Log (change.value);
 	}
 
-	void OnUpdateHandler (object sender, RoomUpdateEventArgs e)
+	void OnUpdateHandler(object sender, RoomUpdateEventArgs e)
 	{
 		// Debug.Log(e.state);
 	}
@@ -120,6 +123,7 @@ public class ColyseusClient : MonoBehaviour {
 	void OnApplicationQuit()
 	{
 		// Ensure the connection with server is closed immediatelly
-		client.Close();
+		if (client != null)
+			client.Close();
 	}
 }
