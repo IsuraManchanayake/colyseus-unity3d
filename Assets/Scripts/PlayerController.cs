@@ -20,6 +20,7 @@ namespace Assets.Scripts
 			}
 			textMessage.text += message + "\n";
 		}
+
 		#endregion
 
 		#region Color
@@ -42,6 +43,7 @@ namespace Assets.Scripts
 			this.color = color;
 			goButton.GetComponent<Image>().color = new Color(color, color, color);
 		}
+
 		#endregion
 
 		#region Name
@@ -52,6 +54,7 @@ namespace Assets.Scripts
 		{
 			textName.text = name;
 		}
+
 		#endregion
 
 		#region Drag and Drop
@@ -79,6 +82,7 @@ namespace Assets.Scripts
 				netHand.OnUserMove(gameObject.transform.localPosition);
 			}
 		}
+
 		#endregion
 	}
 }

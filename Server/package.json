@@ -12,10 +12,12 @@
     "node": ">= 5.x"
   },
   "dependencies": {
+    "base-converter": "^1.1.2",
     "colyseus": "^0.5.0",
-    "express": "^4.13.3"
+    "express": "^4.13.3",
+    "md5": "^2.2.1"
   },
   "devDependencies": {
-    "nodemon": "^1.7.1" 
+    "nodemon": "^1.7.1"
   }
 }

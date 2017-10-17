@@ -17,5 +17,10 @@ namespace Assets.Scripts
 				inputMessage.text = "";
 			}
 		}
+
+		public void Ready()
+		{
+			inputMessage.interactable = true;
+		}
 	}
 }

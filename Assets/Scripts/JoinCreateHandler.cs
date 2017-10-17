@@ -27,7 +27,7 @@ namespace Assets.Scripts
 			Dictionary<string, object> options = new Dictionary<string, object>
 			{
 				{"name", name},
-				{"isPrivate", false}
+				{"type", "joinPublic"}
 			};
 			button.interactable = false;
 			StartCoroutine(netHand.Join(options));
@@ -45,7 +45,7 @@ namespace Assets.Scripts
 			Dictionary<string, object> options = new Dictionary<string, object>
 			{
 				{"name", name},
-				{"isPrivate", false},
+				{"type", "joinPrivate"},
 				{"gameID", privateGameID}
 			};
 			button.interactable = false;
@@ -63,7 +63,7 @@ namespace Assets.Scripts
 			Dictionary<string, object> options = new Dictionary<string, object>
 			{
 				{"name", name},
-				{"isPrivate", false}
+				{"type", "createPrivate"}
 			};
 			buton.interactable = false;
 			StartCoroutine(netHand.Join(options));
