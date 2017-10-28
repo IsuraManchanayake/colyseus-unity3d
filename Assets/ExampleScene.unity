@@ -206,6 +206,7 @@ MonoBehaviour:
     type: 2}
   textHelper: {fileID: 1815960293}
   playerParentTransform: {fileID: 1116688286}
+  messageHand: {fileID: 1862546281}
 --- !u!4 &86463631
 Transform:
   m_ObjectHideFlags: 0
